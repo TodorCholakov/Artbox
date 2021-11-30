@@ -12,10 +12,13 @@ import { AiFillHeart } from "react-icons/ai";
 import { getAuth } from "firebase/auth";
 let display = "block";
 const ItemDetailed = () => {
+  const idUser = localStorage.uid;
   const auth = getAuth();
   const user = auth.currentUser;
   console.log(user);
+  const [isAuthor, setIsAuthor] = useState(false);
   const [item, setItem] = useState({});
+  const [itemRef, setItemRef] = useState({});
   const [imgUrl, setImgUrl] = useState("");
   const { id } = useParams();
   const [docRef, setDocRef] = useState(doc(db, "items", id));
@@ -23,17 +26,6 @@ const ItemDetailed = () => {
   const [rated, setRated] = useState(false);
   const userId = localStorage.uid;
 
-  useEffect(() => {
-    const getItem = async () => {
-      const data = await getDoc(docRef);
-      const aa = data.data().item_rating_usersIds.includes(userId);
-      setRated(aa);
-      setItem(data.data());
-    };
-    getItem();
-  }, [rated]);
-
-  console.log(item);
   getDownloadURL(ref(storage, `${item.item_img_url}`))
     .then((url) => {
       setImgUrl(url);
@@ -42,8 +34,26 @@ const ItemDetailed = () => {
       // Handle any errors
     });
 
+  useEffect(() => {
+    const getItem = async () => {
+      const idUser = localStorage.uid;
+      const data = await getDoc(docRef);
+      if (data.data().item_rating_usersIds.includes(userId)) {
+        setRated(true);
+      }
+      if (data.data().item_authorId === userId) {
+        setIsAuthor(true);
+      }
+
+      setItem(data.data());
+    };
+    getItem();
+  }, [rated]);
+
+  console.log(item);
+  //console.log(item.item_authorId, userId);
+
   const rate = async () => {
-    const idUser = localStorage.uid;
     const itemRef = doc(db, "items", id);
     await updateDoc(itemRef, {
       item_rating_usersIds: arrayUnion(idUser),
@@ -51,6 +61,7 @@ const ItemDetailed = () => {
     });
     setRated(true);
   };
+  console.log(item);
 
   return (
     <ItemContainer
@@ -58,7 +69,7 @@ const ItemDetailed = () => {
       initial="hidden"
       animate="visible"
     >
-      {user ? (
+      {!isAuthor && user ? (
         <Heart onClick={rate}>{!rated ? <AiFillHeart /> : ""}</Heart>
       ) : (
         <span></span>
@@ -83,14 +94,14 @@ const ItemDetailed = () => {
         <Link to={`/items/author-contact/${id}`}>
           <SubmitButton type="button">Contact the author</SubmitButton>
         </Link>
-        {user ? (
+        {isAuthor && user ? (
           <Link to={`/items/item-edit/${id}`}>
             <SubmitButton type="button">Edit item</SubmitButton>
           </Link>
         ) : (
           <span></span>
         )}
-        {user ? (
+        {isAuthor && user ? (
           <Link to={`/items/delete-item/${id}`}>
             <SubmitButton type="button">Delete item </SubmitButton>
           </Link>

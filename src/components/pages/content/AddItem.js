@@ -8,11 +8,14 @@ import { db } from "../../../utils/firebase";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { Navigate } from "react-router-dom";
+import Error from "../errorHandling/Error";
 
 const vh = window.innerHeight;
 const AddItem = () => {
+  const [error, setError] = useState("");
+  const [errorRedirect, setErrorRedirect] = useState("");
   const [redirectNow, setRedirectNow] = useState(false);
-  const [imgText, setImgText] = useState("");
+  const [imgText, setImgText] = useState("Uplaod image!");
   const itemId = uuidv4();
   const id = localStorage.uid;
   const storage = getStorage();
@@ -31,24 +34,40 @@ const AddItem = () => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    if (!user.userName) {
+      setError(
+        `To add a new item you have to set your "User name". You can do that `
+      );
+      setErrorRedirect("/auth/profile");
+    } else {
+      let item_img_url = e.target.item_img_url.files[0];
+      console.log(item_img_url);
+      const imageRef = ref(storage, `itemImages/${itemId}.jpg`);
 
-    let item_img_url = e.target.item_img_url.files[0];
-    console.log(item_img_url);
-    const imageRef = ref(storage, `itemImages/${itemId}.jpg`);
+      uploadBytes(imageRef, item_img_url).then(() => {
+        console.log("Uploaded a blob or file!");
+      });
 
-    uploadBytes(imageRef, item_img_url).then(() => {
-      console.log("Uploaded a blob or file!");
-    });
+      item_img_url = `itemImages/${itemId}.jpg`;
+      let item_title = e.target.item_title.value;
+      let item_author = user.userName;
+      let item_authorId = user.userId;
+      let item_description = e.target.item_description.value;
+      let item_price = e.target.item_price.value;
+      let item_rating = 0;
 
-    item_img_url = `itemImages/${itemId}.jpg`;
-    let item_title = e.target.item_title.value;
-    let item_author = user.userName;
-    let item_authorId = user.userId;
-    let item_description = e.target.item_description.value;
-    let item_price = e.target.item_price.value;
-    let item_rating = 0;
+      AddData(
+        item_img_url,
+        item_authorId,
+        item_title,
+        item_author,
+        item_description,
+        item_price,
+        item_rating
+      );
+    }
 
-    AddData(
+    async function AddData(
       item_img_url,
       item_authorId,
       item_title,
@@ -56,35 +75,25 @@ const AddItem = () => {
       item_description,
       item_price,
       item_rating
-    );
-  };
-
-  async function AddData(
-    item_img_url,
-    item_authorId,
-    item_title,
-    item_author,
-    item_description,
-    item_price,
-    item_rating
-  ) {
-    try {
-      const docRef = await addDoc(collection(db, "items"), {
-        item_authorId,
-        item_img_url: item_img_url,
-        item_title: item_title,
-        item_author: item_author,
-        item_description: item_description,
-        item_price: item_price,
-        item_rating: item_rating,
-        item_rating_usersIds: ["empty"],
-      });
-      console.log("Document written with ID: ", docRef.id);
-      setRedirectNow(true);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+    ) {
+      try {
+        const docRef = await addDoc(collection(db, "items"), {
+          item_authorId,
+          item_img_url: item_img_url,
+          item_title: item_title,
+          item_author: item_author,
+          item_description: item_description,
+          item_price: item_price,
+          item_rating: item_rating,
+          item_rating_usersIds: ["empty"],
+        });
+        console.log("Document written with ID: ", docRef.id);
+        setRedirectNow(true);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
     }
-  }
+  };
 
   return redirectNow ? (
     <Navigate to="/all-items" />
@@ -123,11 +132,10 @@ const AddItem = () => {
                   document.getElementById("inputButton").click();
                 }}
                 type="button"
-                value="Uplad image"
+                value="Upload image"
               ></SubmitButton>
             </InputContainer>
           </InputContainer>
-
           <InputContainer>
             <NavTitle>
               <label htmlFor="item_title">Item title: </label>
@@ -140,7 +148,6 @@ const AddItem = () => {
               required
             />
           </InputContainer>
-
           <InputContainer>
             <NavTitle>
               <label htmlFor="item_description">Item description:</label>
@@ -171,6 +178,7 @@ const AddItem = () => {
             </NavTitle>
             <SubmitButton type="submit" value="Add item" />
           </InputContainer>
+          <Error error={error} errorRedirect={errorRedirect} />
         </form>
       </SubContainer1>
       <SubContainer2>

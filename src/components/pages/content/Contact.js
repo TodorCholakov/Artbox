@@ -16,50 +16,23 @@ const Contact = () => {
         <form onSubmit={onSubmitHandler}>
           <InputContainer>
             <NavTitle>
-              <label htmlFor="email">Email: {localStorage.email} </label>
+              <label htmlFor="adress">Message: </label>
             </NavTitle>
-            <Link to="/auth/change-email">
-              <SubmitButton type="button" value="Edit email"></SubmitButton>
-            </Link>
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="userName">User name:</label>
-            </NavTitle>
-            <Input id="userName" type="text" name="userName" />
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="firstName">First name:</label>
-            </NavTitle>
-            <Input id="firstName" type="text" name="firstName" />
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="lastName">Last name:</label>
-            </NavTitle>
-            <Input id="lastName" type="text" name="lastName" />
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="phoneNumber">Phone number:</label>
-            </NavTitle>
-            <Input id="phoneNumber" type="number" name="phoneNumber" />
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="adress">Address: </label>
-            </NavTitle>
-            <Input id="address" type="text" name="address" />
+            <TextArea
+              id="item_description"
+              type="text"
+              name="item_description"
+              defaultValue=""
+              placeholder="Your message..."
+            ></TextArea>
           </InputContainer>
 
           <InputContainer>
             <NavTitle>
               <label htmlFor="password"></label>
             </NavTitle>
-            <SubmitButton type="submit" value="Update changes" />
+            <SubmitButton type="submit" value="Send message" />
           </InputContainer>
-          <InputContainer></InputContainer>
         </form>
       </SubContainer1>
       <SubContainer2>
@@ -68,12 +41,14 @@ const Contact = () => {
     </Container>
   );
 };
-
-const Image = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%; ;
+const TextArea = styled.textarea`
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  width: 200px;
+  height: 200px;
 `;
+
 const Container = styled(motion.div)`
   display: flex;
   justify-content: center;

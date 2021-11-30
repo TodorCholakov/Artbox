@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { useParams, Navigate } from "react-router-dom";
 
 const vh = window.innerHeight;
@@ -31,7 +31,12 @@ const EditItem = () => {
     let item_img_url = e.target.item_img_url.files[0];
     console.log(item.item_img_url);
     if (item_img_url) {
+      const desertRef = ref(storage, item.item_img_url);
+
+      // Delete the file
+      deleteObject(desertRef);
       const imageRef = ref(storage, `itemImages/${id}.jpg`);
+
       uploadBytes(imageRef, item_img_url).then(() => {
         // console.log("Uploaded a blob or file!");
         setDoc(doc(db, "items", id), {
@@ -43,6 +48,7 @@ const EditItem = () => {
           item_description: e.target.item_description.value,
           item_price: e.target.item_price.value,
           item_rating_usersIds: item.item_rating_usersIds,
+          item_authorId: item.item_authorId,
         }).then(setRedirectNow(true));
       });
     } else {
@@ -50,6 +56,7 @@ const EditItem = () => {
         userId: id,
         item_author: item.item_author,
         item_img_url: item.item_img_url,
+        item_authorId: item.item_authorId,
         item_title: e.target.item_title.value,
         item_rating: item.item_rating,
         item_description: e.target.item_description.value,
