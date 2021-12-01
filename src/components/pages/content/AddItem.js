@@ -46,25 +46,25 @@ const AddItem = () => {
 
       uploadBytes(imageRef, item_img_url).then(() => {
         console.log("Uploaded a blob or file!");
+
+        item_img_url = `itemImages/${itemId}.jpg`;
+        let item_title = e.target.item_title.value;
+        let item_author = user.userName;
+        let item_authorId = user.userId;
+        let item_description = e.target.item_description.value;
+        let item_price = e.target.item_price.value;
+        let item_rating = 0;
+
+        AddData(
+          item_img_url,
+          item_authorId,
+          item_title,
+          item_author,
+          item_description,
+          item_price,
+          item_rating
+        );
       });
-
-      item_img_url = `itemImages/${itemId}.jpg`;
-      let item_title = e.target.item_title.value;
-      let item_author = user.userName;
-      let item_authorId = user.userId;
-      let item_description = e.target.item_description.value;
-      let item_price = e.target.item_price.value;
-      let item_rating = 0;
-
-      AddData(
-        item_img_url,
-        item_authorId,
-        item_title,
-        item_author,
-        item_description,
-        item_price,
-        item_rating
-      );
     }
 
     async function AddData(

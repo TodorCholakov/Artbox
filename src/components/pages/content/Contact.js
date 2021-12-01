@@ -1,11 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { setDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+
 const vh = window.innerHeight;
 
 const Contact = () => {
