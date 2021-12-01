@@ -1,6 +1,8 @@
 import React from "react";
 import { getAuth, deleteUser } from "firebase/auth";
-
+import Error from "../errorHandling/Error";
+import { Navigate } from "react-router-dom";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import {
   doc,
   deleteDoc,
@@ -16,38 +18,57 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 const vh = window.innerHeight;
-const Profile = () => {
+const DeleteProfile = () => {
+  const [redirectNow, setRedirectNow] = useState(false);
+  const [error, setError] = useState("");
+  const storage = getStorage();
   const id = localStorage.uid;
-  console.log(id);
-  const q = query(collection(db, "users"), where("userId", "==", id));
 
   const [user, setUser] = useState([]);
-  useEffect(() => {
-    const getUser = async () => {
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
-        setUser(doc.data());
-      });
-    };
-    getUser();
-  }, []);
 
   const onLoginFormSubmitHandler = async (e) => {
     e.preventDefault();
+
+    //delete items
     const auth = getAuth();
     const user = auth.currentUser;
-    await deleteDoc(doc(db, "users", id));
+    const q = query(
+      collection(db, "items"),
+      where("item_authorId", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc1) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc1.id, " => ", doc1.data());
+      const imageRef = ref(storage, doc1.data().item_img_url);
+      // Delete the file
+      deleteObject(imageRef);
+      deleteDoc(doc(db, "items", doc1.id));
+    });
+
+    deleteDoc(doc(db, "users", user.uid));
+    console.log(user.uid);
+    const deleteProfilePic = ref(storage, `profileImages/${user.uid}.jpg`);
+    // Delete the file
+    deleteObject(deleteProfilePic);
+
+    //const profilePic = ref(storage, doc1.data().item_img_url);
+    //deleteObject(imageRef);
+
     deleteUser(user)
       .then(() => {
-        // User deleted.
+        console.log("Successfully deleted user");
         localStorage.clear();
+        setRedirectNow(true);
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log("Error deleting user:", error);
       });
   };
-  return (
+
+  return redirectNow ? (
+    <Navigate to="/all-items" />
+  ) : (
     <Container variants={subTitle} initial="hidden" animate="show">
       <SubContainer1>
         <form onSubmit={onLoginFormSubmitHandler}>
@@ -70,7 +91,9 @@ const Profile = () => {
               <SubmitButton type="submit" value="Delete profile" />
             </NavTitle>
           </InputContainer>
-          <InputContainer></InputContainer>
+          <InputContainer>
+            <Error error={error} />
+          </InputContainer>
         </form>
       </SubContainer1>
       <SubContainer2>
@@ -161,4 +184,4 @@ const subTitle = {
   },
 };
 
-export default Profile;
+export default DeleteProfile;

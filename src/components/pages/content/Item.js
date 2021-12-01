@@ -6,8 +6,6 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import styled from "styled-components";
 import { useState } from "react";
 
-
-
 const Item = (props) => {
   const [url, setUrl] = useState();
   const storage = getStorage();
@@ -16,6 +14,7 @@ const Item = (props) => {
   getDownloadURL(ref(storage, `${props.item_img_url}`))
     .then((url) => {
       setItem(url);
+      console.log(props.item_img_url);
       const img = document.getElementById(props.id);
       img.setAttribute("src", item);
     })

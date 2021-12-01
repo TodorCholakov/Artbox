@@ -13,6 +13,7 @@ const vh = window.innerHeight;
 
 const Profile = () => {
   const [redirectNow, setRedirectNow] = useState(false);
+  const [profileImage, setProfileImage] = useState();
   const id = localStorage.uid;
   const storage = getStorage();
   const storageRef = ref(storage, `profileImages/${id}.jpg`);
@@ -31,8 +32,18 @@ const Profile = () => {
     }
     Fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  }, [profileImage]);
+  const imgRef = `profileImages/${id}.jpg`;
+  getDownloadURL(ref(storage, imgRef))
+    .then((url) => {
+      setProfileImage(url);
+      console.log(url);
+      const img = document.getElementById("myimg");
+      img.setAttribute("src", profileImage);
+    })
+    .catch((error) => {
+      // Handle any errors
+    });
   console.log(user);
 
   const onSubmitHandler = async (e) => {
@@ -40,7 +51,7 @@ const Profile = () => {
 
     await setDoc(doc(db, "users", id), {
       userId: id,
-      userProfilePic: e.target.userProfilePic.src,
+      userProfilePic: `profileImages/${id}.jpg`,
       userName: e.target.userName.value,
       firstName: e.target.firstName.value,
       lastName: e.target.lastName.value,
@@ -57,8 +68,10 @@ const Profile = () => {
         const imgRef = `profileImages/${id}.jpg`;
         getDownloadURL(ref(storage, imgRef))
           .then((url) => {
+            setProfileImage(url);
+            console.log(url);
             const img = document.getElementById("myimg");
-            img.setAttribute("src", url);
+            img.setAttribute("src", profileImage);
           })
           .catch((error) => {
             // Handle any errors
