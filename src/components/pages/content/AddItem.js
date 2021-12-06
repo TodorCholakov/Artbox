@@ -1,36 +1,25 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { collection, addDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { Navigate } from "react-router-dom";
 import Error from "../errorHandling/Error";
+import { UserContext } from "../../context/UserContext";
 
 const vh = window.innerHeight;
 const AddItem = () => {
+  const { user } = useContext(UserContext);
   const [error, setError] = useState("");
   const [errorRedirect, setErrorRedirect] = useState("");
   const [redirectNow, setRedirectNow] = useState(false);
   const [imgText, setImgText] = useState("Uplaod image!");
   const itemId = uuidv4();
-  const id = localStorage.uid;
   const storage = getStorage();
-  const [user, setuser] = useState({});
-  const docRef = doc(db, "users", id);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const getUser = await getDoc(docRef);
-      setuser(getUser.data());
-      console.log(user.userId);
-    };
-    getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  console.log(user);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
