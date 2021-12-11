@@ -1,30 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { setDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { UserContext } from "../../context/UserContext";
+
 const vh = window.innerHeight;
 
 const Contact = ({ email }) => {
-  const id = localStorage.uid;
-  const docRef = doc(db, "users", id);
-  const [user, setUser] = useState({});
-  useEffect(() => {
-    async function Fetch() {
-      try {
-        const getUser = await getDoc(docRef);
-        setUser(getUser.data());
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    Fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const { user } = useContext(UserContext);
+  console.log(user);
   const onSubmitHandler = async (e) => {};
   return (
     <Container variants={subTitle} initial="hidden" animate="show">
@@ -107,14 +90,13 @@ const TextArea = styled.textarea`
   display: flex;
   justify-content: center;
   padding: 5px;
-  width: 200px;
+  min-width: 200px;
   height: 200px;
 `;
 const Container = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: stretch;
-
   height: ${vh - 40}px;
   border-top: 1px solid white;
 `;
@@ -122,15 +104,19 @@ const Container = styled(motion.div)`
 const NavTitle = styled.span`
   display: flex;
   font-size: 18px;
-  width: 200px;
+  min-width: 200px;
   margin-right: 5px;
   align-items: center;
+  padding: 5px;
 `;
 const InputContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled(motion.input)`
@@ -154,6 +140,9 @@ const SubContainer2 = styled.div`
   width: 50%;
   background-color: #39393f;
   color: #ffffff;
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.div`

@@ -18,7 +18,7 @@ const ItemDetailed = () => {
   console.log(user);
   const [isAuthor, setIsAuthor] = useState(false);
   const [item, setItem] = useState({});
-  const [itemRef, setItemRef] = useState({});
+
   const [imgUrl, setImgUrl] = useState("");
   const { id } = useParams();
   const [docRef, setDocRef] = useState(doc(db, "items", id));
@@ -36,7 +36,6 @@ const ItemDetailed = () => {
 
   useEffect(() => {
     const getItem = async () => {
-      const idUser = localStorage.uid;
       const data = await getDoc(docRef);
       if (data.data().item_rating_usersIds.includes(userId)) {
         setRated(true);
@@ -141,7 +140,7 @@ const ItemContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  width: 600px;
+  max-width: 600px;
   padding-bottom: 15px;
   margin: 0 auto;
   margin-top: 5px;
@@ -149,7 +148,7 @@ const ItemContainer = styled(motion.div)`
   box-shadow: -6px 7px 19px -4px #000000;
 `;
 const SectionItemImg = styled.img`
-  width: 600px;
+  max-width: 600px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   height: 400px;

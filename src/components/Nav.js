@@ -1,6 +1,7 @@
 import React from "react";
 import { FiLogOut } from "react-icons/fi";
-import { CgProfile } from "react-icons/cg";
+
+import { CgProfile, CgSmileNone } from "react-icons/cg";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -11,19 +12,23 @@ const Nav = ({ user }) => {
   return (
     <NavWrapper>
       <UlList>
-        {isAuthenticated ? (
-          <Link to="/auth/profile">Welcome {user.email}</Link>
-        ) : (
-          <span></span>
+        {isAuthenticated && (
+          <li>
+            <Link to="/auth/profile">Welcome {user.email}</Link>
+          </li>
         )}
+
         <li>
           <Link to="/">Home</Link>
         </li>
         <li>
           <Link to="/all-items">All items</Link>
         </li>
-        {isAuthenticated ? <Link to="/add-item">Add item</Link> : <span></span>}
-
+        {isAuthenticated && (
+          <li>
+            <Link to="/add-item">Add item</Link>
+          </li>
+        )}
         <li>
           <Link to="/about-us">About us</Link>
         </li>
@@ -47,6 +52,7 @@ const Nav = ({ user }) => {
             </Link>
           </li>
         )}
+
         {isAuthenticated && (
           <li>
             <Link to="/auth/signOut">
@@ -62,28 +68,43 @@ const Nav = ({ user }) => {
 const NavWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 7px;
   justify-content: center;
   background-color: #39393f;
-  height: 40px;
-
   width: 100%;
   -webkit-box-shadow: 1px 4px 6px -3px rgba(0, 0, 0, 0.65);
   box-shadow: 1px 4px 6px -3px rgba(0, 0, 0, 0.65);
+  display: column;
+  height: 50px;
+
+  @media (max-width: 768px) {
+    transition: 200ms;
+    transition-timing-function: ease;
+    &:hover {
+      transition: 200ms;
+      height: 360px;
+      transition-timing-function: ease;
+    }
+  }
 `;
 const styleIcon = {
   fontSize: "18px",
   marginTop: "5px",
 };
+
 const UlList = styled.ul`
   list-style: none;
   display: flex;
   align-items: center;
   color: #ffffff;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    li {
+      padding: 10px;
+    }
+  }
+
   li {
-    padding: 0px 10px;
-    align-items: bottom;
     &:hover {
       opacity: 0.7;
       transition: 50ms;
@@ -93,7 +114,7 @@ const UlList = styled.ul`
   a {
     text-decoration: none;
     color: #ffffff;
-    padding: 10px;
+    padding: 15px;
   }
 `;
 

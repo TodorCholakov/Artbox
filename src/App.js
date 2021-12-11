@@ -12,7 +12,7 @@ import Profile from "./components/pages/auth/Profile";
 import DeleteProfile from "./components/pages/auth/DeleteProfile";
 import AllItems from "./components/pages/content/AllItems";
 import AboutUs from "./components/pages/content/AboutUs";
-import UpdateProduct from "./components/pages/content/UpdateProduct";
+
 import AddItem from "./components/pages/content/AddItem";
 import ItemDetailed from "./components/pages/content/ItemDetailed";
 import Contact from "./components/pages/content/Contact";
@@ -66,10 +66,6 @@ function App() {
             <Route path="/items/item-detailed/:id" element={<ItemDetailed />} />
             <Route path="/add-item" element={<AddItem />} />
 
-            <Route
-              path="/update-product"
-              element={<UpdateProduct name="GamePlay" />}
-            />
             <Route path="/auth/signOut" element={<SignOut />} />
           </Routes>
         </AnimatePresence>

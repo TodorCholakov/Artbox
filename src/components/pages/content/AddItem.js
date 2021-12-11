@@ -98,32 +98,28 @@ const AddItem = () => {
             defaultValue=""
           />
           <InputContainer>
-            <InputContainer>
-              <NavTitle>
-                <NavTitle>
-                  <p alt="noImage" id="myimg" name="userProfilePic">
-                    {imgText}
-                  </p>
-                </NavTitle>
+            <NavTitle>
+              <p alt="noImage" id="myimg" name="userProfilePic">
+                {imgText}
+              </p>
+            </NavTitle>
 
-                <Input
-                  type="file"
-                  name="item_img_url"
-                  className="custom-file-input"
-                  id="inputButton"
-                  onChange={() => setImgText("Image is loaded")}
-                  required
-                />
-              </NavTitle>
+            <Input
+              type="file"
+              name="item_img_url"
+              className="custom-file-input"
+              id="inputButton"
+              onChange={() => setImgText("Image is loaded")}
+              required
+            />
 
-              <SubmitButton
-                onClick={() => {
-                  document.getElementById("inputButton").click();
-                }}
-                type="button"
-                value="Upload image"
-              ></SubmitButton>
-            </InputContainer>
+            <SubmitButton
+              onClick={() => {
+                document.getElementById("inputButton").click();
+              }}
+              type="button"
+              value="Upload image"
+            ></SubmitButton>
           </InputContainer>
           <InputContainer>
             <NavTitle>
@@ -176,16 +172,11 @@ const AddItem = () => {
     </Container>
   );
 };
-const Image = styled.p`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%; ;
-`;
+
 const Container = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: stretch;
-
   height: ${vh - 40}px;
   border-top: 1px solid white;
 `;
@@ -196,33 +187,35 @@ const NavTitle = styled.span`
   width: 200px;
   margin-right: 5px;
   align-items: center;
+  padding-bottom: 5px;
 `;
 const InputContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled(motion.input)`
   display: flex;
   justify-content: center;
   padding: 5px;
-  width: 200px;
+  min-width: 200px;
   height: 40px;
 `;
 const TextArea = styled.textarea`
   display: flex;
   justify-content: center;
   padding: 5px;
-  width: 200px;
+  min-width: 200px;
   height: 150px;
 `;
 
 const SubContainer1 = styled.div`
   width: 50%;
-  background-color: #ffffff;
-  flex-grow: 1;
   margin-top: 10px;
 `;
 const SubContainer2 = styled.div`
@@ -231,6 +224,9 @@ const SubContainer2 = styled.div`
   width: 50%;
   background-color: #39393f;
   color: #ffffff;
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.div`
@@ -246,11 +242,10 @@ const SubmitButton = styled.input`
   display: inline-block;
   cursor: pointer;
   color: #39393f;
-  width: 200px;
+  min-width: 200px;
   height: 40px;
   font-size: 16px;
   padding: 5px;
-  width: 200px;
   height: 40px;
   transition: 0.5s;
   &:hover {

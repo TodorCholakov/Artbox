@@ -52,7 +52,6 @@ const Container = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: stretch;
-
   height: ${vh - 40}px;
   border-top: 1px solid white;
 `;
@@ -70,6 +69,9 @@ const SubContainer2 = styled.div`
   width: 50%;
   background-color: #39393f;
   color: #ffffff;
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.div`

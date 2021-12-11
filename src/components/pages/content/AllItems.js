@@ -11,7 +11,6 @@ import { pageAnimation } from "../../../animation";
 const AllItems = () => {
   const itemsCollectionRef = collection(db, "items");
   const [items, setItems] = useState([]);
-  const [item, setItem] = useState();
   useEffect(() => {
     const getItems = async () => {
       const setDataAll = await getDocs(itemsCollectionRef);

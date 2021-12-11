@@ -22,7 +22,6 @@ const DeleteProfile = () => {
   const [redirectNow, setRedirectNow] = useState(false);
   const [error, setError] = useState("");
   const storage = getStorage();
-  const id = localStorage.uid;
 
   const [user, setUser] = useState([]);
 
@@ -124,13 +123,6 @@ const InputContainer = styled(motion.div)`
   padding: 5px;
 `;
 
-const Input = styled(motion.input)`
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-  width: 200px;
-  height: 40px;
-`;
 const SubContainer1 = styled.div`
   padding: 50px;
   width: 50%;
