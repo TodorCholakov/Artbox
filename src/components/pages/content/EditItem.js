@@ -168,7 +168,7 @@ const NavTitle = styled.span`
   width: 200px;
   margin-right: 5px;
   align-items: center;
-  padding-top: 5px;
+  padding-bottom: 5px;
 `;
 const InputContainer = styled(motion.div)`
   display: flex;

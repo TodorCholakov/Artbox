@@ -113,14 +113,18 @@ const Container = styled(motion.div)`
 
 const NavTitle = styled.span`
   font-size: 16px;
-  width: 500px;
+  min-width: 200px;
   margin-right: 5px;
+  padding-bottom: 5px;
 `;
 const InputContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const SubContainer1 = styled.div`
@@ -136,9 +140,11 @@ const SubContainer2 = styled.div`
   align-items: center;
   justify-content: center;
   width: 50%;
-
   background-color: #39393f;
   color: #ffffff;
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.div`
@@ -153,13 +159,10 @@ const SubmitButton = styled(motion.input)`
   display: inline-block;
   cursor: pointer;
   color: #39393f;
-  width: 200px;
+  min-width: 200px;
   height: 40px;
   font-size: 16px;
   padding: 5px;
-  width: 200px;
-  height: 40px;
-
   transition: 0.5s;
   &:hover {
     transition: 0.5s;

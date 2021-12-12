@@ -46,6 +46,7 @@ const NavTitle = styled.span`
   padding-bottom: 10px;
   margin-right: 5px;
   align-items: center;
+  padding-bottom: 5px;
 `;
 
 const Container = styled(motion.div)`
