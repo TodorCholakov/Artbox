@@ -114,7 +114,7 @@ const InputContainer = styled(motion.div)`
   justify-content: center;
   align-items: center;
   padding: 5px;
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
@@ -132,6 +132,9 @@ const SubContainer1 = styled.div`
   background-color: #ffffff;
   flex-grow: 1;
   margin-top: 25vh;
+  @media (max-width: 768px) {
+    margin-top: 10px;
+  }
 `;
 const SubContainer2 = styled.div`
   display: flex;

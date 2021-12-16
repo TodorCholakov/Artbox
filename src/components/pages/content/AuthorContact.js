@@ -1,14 +1,34 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { UserContext } from "../../context/UserContext";
+import { useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../utils/firebase";
 
 const vh = window.innerHeight;
 
-const Contact = ({ email }) => {
-  const { user } = useContext(UserContext);
-  console.log(user);
-  const onSubmitHandler = async (e) => {};
+const Contact = () => {
+  const { id } = useParams();
+  const docRef = doc(db, "items", id);
+  const [item, setItem] = useState({});
+  useEffect(() => {
+    const getItem = async () => {
+      const data = await getDoc(docRef);
+      setItem(data.data());
+    };
+    getItem();
+  }, []);
+  console.log(item);
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    let saMessage_sender_id = user._id;
+    let saMessage_sender_email = user.email;
+    let saMessage_sender_firstName = e.target.firstName.value;
+    let saMessage_sender_lastName = e.target.lastName.value;
+    let saMessage_sender_phoneNumber = e.target.phoneNumber.value;
+    let saMessage_sender_message = e.target.message.value;
+    let saMessage_date = Date.now();
+  };
   return (
     <Container variants={subTitle} initial="hidden" animate="show">
       <SubContainer1>
@@ -17,7 +37,7 @@ const Contact = ({ email }) => {
             <NavTitle>
               <label htmlFor="email">Author Email:</label>
             </NavTitle>
-            <NavTitle>{email}</NavTitle>
+            <NavTitle>{item.item_author_email}</NavTitle>
           </InputContainer>
           <HR />
           <InputContainer>

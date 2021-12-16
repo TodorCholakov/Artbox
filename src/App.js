@@ -12,7 +12,6 @@ import Profile from "./components/pages/auth/Profile";
 import DeleteProfile from "./components/pages/auth/DeleteProfile";
 import AllItems from "./components/pages/content/AllItems";
 import AboutUs from "./components/pages/content/AboutUs";
-
 import AddItem from "./components/pages/content/AddItem";
 import ItemDetailed from "./components/pages/content/ItemDetailed";
 import Contact from "./components/pages/content/Contact";
@@ -57,14 +56,14 @@ function App() {
             <Route path="/items/delete-item/:id" element={<DeleteItem />} />
             <Route
               path="/items/author-contact/:id"
-              element={<AuthorContact {...user} />}
+              element={<AuthorContact />}
             />
             <Route
               path="/items/item-edit/:id"
               element={<EditItem {...user} />}
             />
             <Route path="/items/item-detailed/:id" element={<ItemDetailed />} />
-            <Route path="/add-item" element={<AddItem />} />
+            <Route path="/add-item" element={<AddItem user={user} />} />
 
             <Route path="/auth/signOut" element={<SignOut />} />
           </Routes>

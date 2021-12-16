@@ -9,7 +9,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const auth = getAuth();
 
-  const [user, setuser] = useState({});
+  const [userDetailed, setUserDetailed] = useState({});
 
   useEffect(() => {
     const getUser = async () => {
@@ -17,13 +17,15 @@ export const UserProvider = ({ children }) => {
       if (id) {
         const docRef = doc(db, "users", id);
         const getUser = await getDoc(docRef);
-        setuser(getUser.data());
+        setUserDetailed(getUser.data());
       }
     };
     getUser();
   }, [auth]);
 
   return (
-    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ userDetailed }}>
+      {children}
+    </UserContext.Provider>
   );
 };

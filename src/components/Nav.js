@@ -77,12 +77,9 @@ const NavWrapper = styled.div`
   height: 50px;
 
   @media (max-width: 768px) {
-    transition: 200ms;
-    transition-timing-function: ease;
+    height: 50px;
     &:hover {
-      transition: 200ms;
-      height: 360px;
-      transition-timing-function: ease;
+      height: auto;
     }
   }
 `;

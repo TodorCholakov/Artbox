@@ -10,20 +10,20 @@ import Error from "../errorHandling/Error";
 import { UserContext } from "../../context/UserContext";
 
 const vh = window.innerHeight;
-const AddItem = () => {
-  const { user } = useContext(UserContext);
+const AddItem = ({ user }) => {
+  const { userDetailed } = useContext(UserContext);
   const [error, setError] = useState("");
   const [errorRedirect, setErrorRedirect] = useState("");
   const [redirectNow, setRedirectNow] = useState(false);
   const [imgText, setImgText] = useState("Uplaod image!");
   const itemId = uuidv4();
   const storage = getStorage();
-
   console.log(user);
+  console.log(userDetailed);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (!user.userName) {
+    if (!userDetailed.userName) {
       setError(
         `To add a new item you have to set your "User name". You can do that `
       );
@@ -38,8 +38,9 @@ const AddItem = () => {
 
         item_img_url = `itemImages/${itemId}.jpg`;
         let item_title = e.target.item_title.value;
-        let item_author = user.userName;
-        let item_authorId = user.userId;
+        let item_author = userDetailed.userName;
+        let item_author_email = user.email;
+        let item_authorId = userDetailed.userId;
         let item_description = e.target.item_description.value;
         let item_price = e.target.item_price.value;
         let item_rating = 0;
@@ -49,6 +50,7 @@ const AddItem = () => {
           item_authorId,
           item_title,
           item_author,
+          item_author_email,
           item_description,
           item_price,
           item_rating
@@ -61,6 +63,7 @@ const AddItem = () => {
       item_authorId,
       item_title,
       item_author,
+      item_author_email,
       item_description,
       item_price,
       item_rating
@@ -71,6 +74,7 @@ const AddItem = () => {
           item_img_url: item_img_url,
           item_title: item_title,
           item_author: item_author,
+          item_author_email: item_author_email,
           item_description: item_description,
           item_price: item_price,
           item_rating: item_rating,
@@ -90,13 +94,6 @@ const AddItem = () => {
     <Container variants={subTitle} initial="hidden" animate="show">
       <SubContainer1>
         <form onSubmit={onSubmitHandler}>
-          <Input
-            id="item_author"
-            type="hidden"
-            name="item_author"
-            value={user.item_author}
-            defaultValue=""
-          />
           <InputContainer>
             <NavTitle>
               <p alt="noImage" id="myimg" name="userProfilePic">
