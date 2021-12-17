@@ -1,53 +1,37 @@
 import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, updateEmail } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import Error from "../errorHandling/Error";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+
 const auth = getAuth();
+
 const vh = window.innerHeight;
-const Register = () => {
+const ChangeEmail = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const onLoginFormSubmitHandler = (e) => {
     e.preventDefault();
 
-    const userName = e.target.userName.value;
-    const password = e.target.password.value;
+    const email = e.target.email.value;
 
-    console.log(userName, password);
-
-    const AddUserIdToUsers = async (userId) => {
-      try {
-        await setDoc(doc(db, "users", userId), {
-          userId: userId,
-        });
-        console.log("Document written with ID: ", userId);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    };
-
-    createUserWithEmailAndPassword(auth, userName, password)
-      .then((userCredential) => {
-        localStorage.setItem("uid", userCredential.user.uid);
-        localStorage.setItem("email", userCredential.user.email);
-
-        let userId = userCredential.user.uid;
-        AddUserIdToUsers(userId);
-
-        navigate("/auth/profile");
+    updateEmail(auth.currentUser, email)
+      .then(() => {
+        localStorage.setItem("email", email);
+        navigate("/all-items");
       })
       .catch((error) => {
-        //    const errorCode = error.code;
-        //    const errorMessage = error.message;
-        // ..
-        console.log(error);
         setError(error.code.slice(5).toUpperCase());
       });
+  };
+
+  const subTitle = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { duration: 2, ease: "easeIn" },
+    },
   };
 
   return (
@@ -56,50 +40,31 @@ const Register = () => {
         <form onSubmit={onLoginFormSubmitHandler}>
           <InputContainer>
             <NavTitle>
-              <label htmlFor="email">Email:</label>
+              <label htmlFor="email">Set a new email:</label>
             </NavTitle>
-            <Input id="email" type="text" name="userName" />
+            <Input id="email" type="text" name="email" />
           </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="password">Password:</label>
-            </NavTitle>
-            <Input id="password" type="text" name="password" />
-          </InputContainer>
+
           <InputContainer>
             <NavTitle>
               <label htmlFor="password"></label>
             </NavTitle>
-            <SubmitButton type="submit" value="Register" />
+            <SubmitButton type="submit" value="Set email" />
           </InputContainer>
           <InputContainer>
-            <NavTitle>
-              <label htmlFor="password"></label>
-            </NavTitle>
-            <p>
-              or login
-              <Link to="/auth/login ">
-                <b> here</b>
-              </Link>
-              <Error error={error} />
-            </p>
+            <Error error={error} />
           </InputContainer>
         </form>
       </SubContainer1>
       <SubContainer2>
-        <Heading>REGISTER</Heading>
+        <Heading>
+          EDIT <br /> EMAIL
+        </Heading>
       </SubContainer2>
     </Container>
   );
 };
 
-const subTitle = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { duration: 2, ease: "easeIn" },
-  },
-};
 const Container = styled(motion.div)`
   display: flex;
   justify-content: center;
@@ -136,7 +101,6 @@ const SubContainer1 = styled.div`
   padding: 50px;
   width: 50%;
   background-color: #ffffff;
-
   flex-grow: 1;
   margin-top: 25vh;
 `;
@@ -177,4 +141,4 @@ const SubmitButton = styled(motion.input)`
   }
 `;
 
-export default Register;
+export default ChangeEmail;

@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import Error from "../errorHandling/Error";
-import styled from "styled-components";
+import React from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
+import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import Error from "../errorHandling/Error";
+
 const auth = getAuth();
 const vh = window.innerHeight;
-const Register = () => {
+
+const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const onLoginFormSubmitHandler = (e) => {
@@ -20,34 +21,26 @@ const Register = () => {
 
     console.log(userName, password);
 
-    const AddUserIdToUsers = async (userId) => {
-      try {
-        await setDoc(doc(db, "users", userId), {
-          userId: userId,
-        });
-        console.log("Document written with ID: ", userId);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    };
-
-    createUserWithEmailAndPassword(auth, userName, password)
+    signInWithEmailAndPassword(auth, userName, password)
       .then((userCredential) => {
+        console.log("User successfully logged in");
         localStorage.setItem("uid", userCredential.user.uid);
         localStorage.setItem("email", userCredential.user.email);
 
-        let userId = userCredential.user.uid;
-        AddUserIdToUsers(userId);
-
-        navigate("/auth/profile");
+        navigate("/all-items");
       })
       .catch((error) => {
-        //    const errorCode = error.code;
-        //    const errorMessage = error.message;
-        // ..
         console.log(error);
         setError(error.code.slice(5).toUpperCase());
       });
+  };
+
+  const subTitle = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { duration: 2, ease: "easeIn" },
+    },
   };
 
   return (
@@ -70,16 +63,26 @@ const Register = () => {
             <NavTitle>
               <label htmlFor="password"></label>
             </NavTitle>
-            <SubmitButton type="submit" value="Register" />
+            <SubmitButton type="submit" value="Login" />
           </InputContainer>
           <InputContainer>
             <NavTitle>
               <label htmlFor="password"></label>
             </NavTitle>
             <p>
-              or login
-              <Link to="/auth/login ">
-                <b> here</b>
+              or register{" "}
+              <Link to="/auth/register">
+                <b>here</b>
+              </Link>
+            </p>
+          </InputContainer>
+          <InputContainer>
+            <NavTitle>
+              <label htmlFor="password"></label>
+            </NavTitle>
+            <p>
+              <Link to="/auth/passwordReset">
+                <b>Forgotten password</b>
               </Link>
               <Error error={error} />
             </p>
@@ -87,18 +90,10 @@ const Register = () => {
         </form>
       </SubContainer1>
       <SubContainer2>
-        <Heading>REGISTER</Heading>
+        <Heading>LOGIN</Heading>
       </SubContainer2>
     </Container>
   );
-};
-
-const subTitle = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { duration: 2, ease: "easeIn" },
-  },
 };
 const Container = styled(motion.div)`
   display: flex;
@@ -120,7 +115,7 @@ const InputContainer = styled(motion.div)`
   justify-content: center;
   align-items: center;
   padding: 5px;
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
@@ -136,9 +131,11 @@ const SubContainer1 = styled.div`
   padding: 50px;
   width: 50%;
   background-color: #ffffff;
-
   flex-grow: 1;
   margin-top: 25vh;
+  @media (max-width: 768px) {
+    margin-top: 10px;
+  }
 `;
 const SubContainer2 = styled.div`
   display: flex;
@@ -177,4 +174,4 @@ const SubmitButton = styled(motion.input)`
   }
 `;
 
-export default Register;
+export default Login;

@@ -1,51 +1,24 @@
 import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { motion } from "framer-motion";
 import Error from "../errorHandling/Error";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+
 const auth = getAuth();
 const vh = window.innerHeight;
-const Register = () => {
+const PasswordReset = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const onLoginFormSubmitHandler = (e) => {
     e.preventDefault();
-
-    const userName = e.target.userName.value;
-    const password = e.target.password.value;
-
-    console.log(userName, password);
-
-    const AddUserIdToUsers = async (userId) => {
-      try {
-        await setDoc(doc(db, "users", userId), {
-          userId: userId,
-        });
-        console.log("Document written with ID: ", userId);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    };
-
-    createUserWithEmailAndPassword(auth, userName, password)
-      .then((userCredential) => {
-        localStorage.setItem("uid", userCredential.user.uid);
-        localStorage.setItem("email", userCredential.user.email);
-
-        let userId = userCredential.user.uid;
-        AddUserIdToUsers(userId);
-
-        navigate("/auth/profile");
+    const email = e.target.email.value;
+    console.log(email);
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        navigate("/auth/login");
       })
       .catch((error) => {
-        //    const errorCode = error.code;
-        //    const errorMessage = error.message;
-        // ..
-        console.log(error);
         setError(error.code.slice(5).toUpperCase());
       });
   };
@@ -60,34 +33,21 @@ const Register = () => {
             </NavTitle>
             <Input id="email" type="text" name="userName" />
           </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="password">Password:</label>
-            </NavTitle>
-            <Input id="password" type="text" name="password" />
-          </InputContainer>
+
           <InputContainer>
             <NavTitle>
               <label htmlFor="password"></label>
             </NavTitle>
-            <SubmitButton type="submit" value="Register" />
+            <SubmitButton type="submit" value="Password reset" />
           </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="password"></label>
-            </NavTitle>
-            <p>
-              or login
-              <Link to="/auth/login ">
-                <b> here</b>
-              </Link>
-              <Error error={error} />
-            </p>
-          </InputContainer>
+          <Error error={error} />
         </form>
       </SubContainer1>
       <SubContainer2>
-        <Heading>REGISTER</Heading>
+        <Heading>
+          PASSWORD <br />
+          RESET
+        </Heading>
       </SubContainer2>
     </Container>
   );
@@ -136,7 +96,6 @@ const SubContainer1 = styled.div`
   padding: 50px;
   width: 50%;
   background-color: #ffffff;
-
   flex-grow: 1;
   margin-top: 25vh;
 `;
@@ -147,7 +106,7 @@ const SubContainer2 = styled.div`
   width: 50%;
   background-color: #39393f;
   color: #ffffff;
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     display: none;
   }
 `;
@@ -177,4 +136,4 @@ const SubmitButton = styled(motion.input)`
   }
 `;
 
-export default Register;
+export default PasswordReset;

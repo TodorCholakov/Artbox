@@ -58,7 +58,6 @@ const Profile = () => {
       phoneNumber: e.target.phoneNumber.value,
       address: e.target.address.value,
     });
-    localStorage.setItem("userName", e.target.userName.value);
     setRedirectNow(true);
   };
   const changeHandler = (e) => {

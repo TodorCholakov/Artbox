@@ -35,7 +35,6 @@ const Register = () => {
       .then((userCredential) => {
         localStorage.setItem("uid", userCredential.user.uid);
         localStorage.setItem("email", userCredential.user.email);
-
         let userId = userCredential.user.uid;
         AddUserIdToUsers(userId);
 

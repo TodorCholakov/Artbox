@@ -1,69 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
 
 const vh = window.innerHeight;
 
 const Contact = () => {
-  const { id } = useParams();
-  const docRef = doc(db, "items", id);
-  const [item, setItem] = useState({});
-  useEffect(() => {
-    const getItem = async () => {
-      const data = await getDoc(docRef);
-      setItem(data.data());
-    };
-    getItem();
-  }, []);
-  console.log(item);
-
+  const onSubmitHandler = async (e) => {};
   return (
     <Container variants={subTitle} initial="hidden" animate="show">
       <SubContainer1>
-        <form>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="email">Author Email:</label>
-            </NavTitle>
-            <NavTitle>{item.item_author_email}</NavTitle>
-          </InputContainer>
-          <HR />
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="firstName">First name:</label>
-            </NavTitle>
-            <Input
-              id="firstName"
-              type="text"
-              name="firstName"
-              placeholder="Your first name..."
-            />
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="lastName">Last name:</label>
-            </NavTitle>
-            <Input
-              id="lastName"
-              type="text"
-              name="lastName"
-              placeholder="Your last name..."
-            />
-          </InputContainer>
-          <InputContainer>
-            <NavTitle>
-              <label htmlFor="phoneNumber">Phone number:</label>
-            </NavTitle>
-            <Input
-              id="phoneNumber"
-              type="number"
-              name="phoneNumber"
-              placeholder="+359..."
-            />
-          </InputContainer>
+        <form onSubmit={onSubmitHandler}>
           <InputContainer>
             <NavTitle>
               <label htmlFor="adress">Message: </label>
@@ -83,7 +29,6 @@ const Contact = () => {
             </NavTitle>
             <SubmitButton type="submit" value="Send message" />
           </InputContainer>
-          <InputContainer></InputContainer>
         </form>
       </SubContainer1>
       <SubContainer2>
@@ -92,11 +37,6 @@ const Contact = () => {
     </Container>
   );
 };
-const HR = styled.div`
-  border-bottom: 1px solid gray;
-  margin: 3px;
-  opacity: 0.7;
-`;
 const TextArea = styled.textarea`
   display: flex;
   justify-content: center;
@@ -104,6 +44,7 @@ const TextArea = styled.textarea`
   min-width: 200px;
   height: 200px;
 `;
+
 const Container = styled(motion.div)`
   display: flex;
   justify-content: center;
@@ -128,14 +69,6 @@ const InputContainer = styled(motion.div)`
   @media (max-width: 600px) {
     flex-direction: column;
   }
-`;
-
-const Input = styled(motion.input)`
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-  width: 200px;
-  height: 40px;
 `;
 
 const SubContainer1 = styled.div`
@@ -166,11 +99,10 @@ const SubmitButton = styled.input`
   display: inline-block;
   cursor: pointer;
   color: #39393f;
-  width: 200px;
+  min-width: 200px;
   height: 40px;
   font-size: 16px;
   padding: 5px;
-  width: 200px;
   height: 40px;
   transition: 0.5s;
   &:hover {

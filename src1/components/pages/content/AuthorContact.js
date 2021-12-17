@@ -18,7 +18,6 @@ const Contact = () => {
     };
     getItem();
   }, []);
-  console.log(item);
 
   return (
     <Container variants={subTitle} initial="hidden" animate="show">
