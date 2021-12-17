@@ -24,7 +24,6 @@ const ItemDetailed = () => {
   const [docRef, setDocRef] = useState(doc(db, "items", id));
   const storage = getStorage();
   const [rated, setRated] = useState(false);
-  const userId = localStorage.uid;
 
   getDownloadURL(ref(storage, `${item.item_img_url}`))
     .then((url) => {
@@ -36,6 +35,7 @@ const ItemDetailed = () => {
 
   useEffect(() => {
     const getItem = async () => {
+      const userId = localStorage.uid;
       const data = await getDoc(docRef);
       if (data.data().item_rating_usersIds.includes(userId)) {
         setRated(true);
@@ -68,21 +68,24 @@ const ItemDetailed = () => {
       initial="hidden"
       animate="visible"
     >
-      {!isAuthor && user ? (
-        <Heart onClick={rate}>{!rated ? <AiFillHeart /> : ""}</Heart>
-      ) : (
-        <span></span>
-      )}
-      <SectionItemImg alt="item-image" src={imgUrl} id="myImg" />
+      <SubContainerTop>
+        {!isAuthor && user ? (
+          <Heart onClick={rate}>{!rated ? <AiFillHeart /> : ""}</Heart>
+        ) : (
+          <span></span>
+        )}
+
+        <SectionItemImg alt="item-image" src={imgUrl} id="myImg" />
+      </SubContainerTop>
       <SubContainer>
         <Title>{item.item_title}</Title>
         <Rating item_rating={item.item_rating} />
       </SubContainer>
       <SubContainer>
-        <SubTitle>by:{item.item_author}</SubTitle>
-        <Price>
-          Price: <b>{item.item_price}</b> lv.
-        </Price>
+        <SubTitle>by: {item.item_author}</SubTitle>
+        <SubTitle>
+          Price: <b>{item.item_price}</b> eur.
+        </SubTitle>
       </SubContainer>
       <HR />
       <SubContainer>
@@ -90,22 +93,20 @@ const ItemDetailed = () => {
       </SubContainer>
       <HR />
       <SubContainer>
-        <Link to={`/items/author-contact/${id}`}>
-          <SubmitButton type="button">Contact the author</SubmitButton>
-        </Link>
-        {isAuthor && user ? (
+        {!isAuthor && user && (
+          <Link to={`/items/author-contact/${id}`}>
+            <SubmitButton type="button">Contact the author</SubmitButton>
+          </Link>
+        )}
+        {isAuthor && user && (
           <Link to={`/items/item-edit/${id}`}>
             <SubmitButton type="button">Edit item</SubmitButton>
           </Link>
-        ) : (
-          <span></span>
         )}
-        {isAuthor && user ? (
+        {isAuthor && user && (
           <Link to={`/items/delete-item/${id}`}>
             <SubmitButton type="button">Delete item </SubmitButton>
           </Link>
-        ) : (
-          <span></span>
         )}
       </SubContainer>
     </ItemContainer>
@@ -123,9 +124,9 @@ const itemContainerAnimation = {
 };
 const Heart = styled.div`
   font-size: 36px;
+  padding-right: 5px;
   color: #ffffff;
   position: absolute;
-  margin-left: 557px;
   margin-top: 2px;
   display: ${display};
   &:hover {
@@ -141,6 +142,8 @@ const ItemContainer = styled(motion.div)`
   flex-direction: column;
   border-radius: 5px;
   max-width: 600px;
+  min-width: 100px;
+  object-fit: cover;
   padding-bottom: 15px;
   margin: 0 auto;
   margin-top: 5px;
@@ -148,12 +151,13 @@ const ItemContainer = styled(motion.div)`
   box-shadow: -6px 7px 19px -4px #000000;
 `;
 const SectionItemImg = styled.img`
+  display: flex;
   max-width: 600px;
+  min-width: 100px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  height: 400px;
+  height: auto;
   margin-bottom: 20px;
-
   object-fit: cover;
 `;
 const SubContainer = styled.div`
@@ -162,14 +166,16 @@ const SubContainer = styled.div`
   padding-right: 10px;
   padding-left: 10px;
 `;
+const SubContainerTop = styled.div`
+  display: flex;
+  justify-content: right;
+`;
 
 const Title = styled.span`
   font-size: 20px;
   font-weight: bold;
 `;
-const Price = styled.span`
-  font-size: 20px;
-`;
+
 const SubTitle = styled.span`
   font-size: 14px;
   font-style: italic;

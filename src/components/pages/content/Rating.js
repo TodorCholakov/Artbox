@@ -8,9 +8,9 @@ const Rating = (props) => {
   let res = [];
   if (rating < 2) {
     res = ["1"];
-  } else if (rating === 2 && rating < 5) {
+  } else if (rating === 2 || rating < 3) {
     res = ["1", "2"];
-  } else if (rating >= 5) {
+  } else if (rating >= 3) {
     res = ["1", "2", "3"];
   }
   return (

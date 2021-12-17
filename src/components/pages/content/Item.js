@@ -41,7 +41,7 @@ const Item = (props) => {
             <i>by: {props.item_author}</i>
           </SectionItemAuthor>
           <SectionitemPrice>
-            Price: <b>{props.item_price}</b> lv.
+            Price: <b>{props.item_price}</b> eur.
           </SectionitemPrice>
         </SubContainer>
         <HR />

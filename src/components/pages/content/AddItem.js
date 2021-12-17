@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { collection, addDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
@@ -7,11 +7,10 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { Navigate } from "react-router-dom";
 import Error from "../errorHandling/Error";
-import { UserContext } from "../../context/UserContext";
+import { doc, getDoc } from "firebase/firestore";
 
 const vh = window.innerHeight;
 const AddItem = ({ user }) => {
-  const { userDetailed } = useContext(UserContext);
   const [error, setError] = useState("");
   const [errorRedirect, setErrorRedirect] = useState("");
   const [redirectNow, setRedirectNow] = useState(false);
@@ -19,11 +18,24 @@ const AddItem = ({ user }) => {
   const itemId = uuidv4();
   const storage = getStorage();
   console.log(user);
+  const [userDetailed, setUserDetailed] = useState({});
+
+  useEffect(() => {
+    const getUser = async () => {
+      const id = localStorage.uid;
+      if (id) {
+        const docRef = doc(db, "users", id);
+        const getUser = await getDoc(docRef);
+        setUserDetailed(getUser.data());
+      }
+    };
+    getUser();
+  }, []);
   console.log(userDetailed);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (!localStorage.userName) {
+    if (!userDetailed.userName) {
       setError(
         `To add a new item you have to set your "User name". You can do that `
       );
@@ -38,7 +50,7 @@ const AddItem = ({ user }) => {
 
         item_img_url = `itemImages/${itemId}.jpg`;
         let item_title = e.target.item_title.value;
-        let item_author = localStorage.userName;
+        let item_author = userDetailed.userName;
         let item_author_email = user.email;
         let item_authorId = userDetailed.userId;
         let item_description = e.target.item_description.value;

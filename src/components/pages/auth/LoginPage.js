@@ -56,7 +56,7 @@ const Login = () => {
             <NavTitle>
               <label htmlFor="password">Password:</label>
             </NavTitle>
-            <Input id="password" type="text" name="password" />
+            <Input id="password" type="password" name="password" />
           </InputContainer>
           <InputContainer>
             <NavTitle>

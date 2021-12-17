@@ -98,6 +98,7 @@ const UlList = styled.ul`
     flex-direction: column;
     li {
       padding: 10px;
+      padding-top: 12px;
     }
   }
 
