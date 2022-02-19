@@ -3,14 +3,18 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDrbq-ab6o9jHfYoqPnaWH2IfTVFwq9X40",
-  authDomain: "artbox-8fff2.firebaseapp.com",
+ 
   databaseURL:
-    "https://artbox-8fff2-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "artbox-8fff2",
-  storageBucket: "artbox-8fff2.appspot.com",
-  messagingSenderId: "356774878463",
-  appId: "1:356774878463:web:7b83538226555e5c9240ca",
+    "https://artbox-a890e-default-rtdb.europe-west1.firebasedatabase.app",
+
+
+  apiKey: "AIzaSyBh_SukxbDm4DGMA0hnELQ8MgHv_YCE19s",
+  authDomain: "artbox-a890e.firebaseapp.com",
+  projectId: "artbox-a890e",
+  storageBucket: "artbox-a890e.appspot.com",
+  messagingSenderId: "964559651999",
+  appId: "1:964559651999:web:3b325a0eddd9ed0fe64eaa",
+  measurementId: "G-4ZNVG78JBL"
 };
 
 const app = initializeApp(firebaseConfig);
